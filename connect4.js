@@ -9,16 +9,34 @@ class Game {
   constructor(height = 6, width = 7) {
     this.height = height;
     this.width = width;
+    this.initialValues();
+  }
+
+  initialValues() {
     this.currPlayer = 1; // active player: 1 or 2
     this.board = [];
+  }
+
+  start() {
     this.makeBoard();
     this.makeHtmlBoard();
+  }
+
+  /** endGame: announce game end */
+
+  endGame(msg) {
+    alert(msg);
+    this.initialValues();
+    this.clearBoard()
+  }
+
+  clearBoard() {
+    this.htmlboard.innerHTML = "";
   }
 
   /** makeBoard: create in-JS board structure:
    *   board = array of rows, each row is array of cells  (board[y][x])
    */
-
   makeBoard() {
     for (let y = 0; y < this.height; y++) {
       this.board.push(Array.from({ length: this.width }));
@@ -26,9 +44,8 @@ class Game {
   }
 
   /** makeHtmlBoard: make HTML table and row of column tops. */
-
   makeHtmlBoard() {
-    const board = document.getElementById('board');
+    this.htmlboard = document.getElementById('board');
 
     // make column tops (clickable area for adding a piece to that column)
     const top = document.createElement('tr');
@@ -41,7 +58,7 @@ class Game {
       top.append(headCell);
     }
 
-    board.append(top);
+    this.htmlboard.append(top);
 
     // make main part of board
     for (let y = 0; y < this.height; y++) {
@@ -53,7 +70,7 @@ class Game {
         row.append(cell);
       }
 
-      board.append(row);
+      this.htmlboard.append(row);
     }
   }
 
@@ -76,12 +93,6 @@ class Game {
 
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
-  }
-
-  /** endGame: announce game end */
-
-  endGame(msg) {
-    alert(msg);
   }
 
   /** handleClick: handle click of column top to play piece */
@@ -146,4 +157,7 @@ class Game {
   }
 }
 
-new Game();
+const game = new Game();
+document.getElementById('start-game').addEventListener('click', () => {
+  game.start()
+});
