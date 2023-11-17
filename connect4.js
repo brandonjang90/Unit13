@@ -17,7 +17,8 @@ class Game {
     this.board = [];
   }
 
-  start() {
+  start(playerOne, playerTwo) {
+    this.players = [playerOne, playerTwo];
     this.makeBoard();
     this.makeHtmlBoard();
   }
@@ -88,7 +89,7 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    piece.style.backgroundColor = this.players[this.currPlayer-1].color;
     piece.style.top = -50 * (y + 2);
 
     const spot = document.getElementById(`${y}-${x}`);
@@ -157,7 +158,16 @@ class Game {
   }
 }
 
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
+
 const game = new Game();
 document.getElementById('start-game').addEventListener('click', () => {
-  game.start()
+  game.start(
+    new Player(document.getElementById('p1-color').value || "blue"),
+    new Player(document.getElementById('p2-color').value || "red")
+  );
 });
